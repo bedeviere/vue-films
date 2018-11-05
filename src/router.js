@@ -20,9 +20,24 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
-      path: '/movies',
+      path: '/movie',
       name: 'movies',
       component: () => import('./views/Movies.vue')
+    },
+    {
+      path: '/movie/:film_id',
+      name: 'movie',
+      component: () => import('./views/Movie.vue')
+    },
+    {
+      path: '/tv',
+      name: 'tvshows',
+      component: () => import('./views/TVShows.vue')
+    },
+    {
+      path: '/tv/:film_id',
+      name: 'tvshow',
+      component: () => import('./views/TVShow.vue')
     }
   ]
 })

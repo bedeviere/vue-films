@@ -1,7 +1,7 @@
 <template>
-  <div class="movies">
-    <h1>Popular Movies</h1>
-    <Films film-type="movie"></Films>
+  <div class="tvshows">
+    <h1>Popular TV Shows</h1>
+    <Films film-type="tv"></Films>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import Films from '@/components/Films.vue'
 
 export default {
-  name: 'Movies',
+  name: 'TVShows',
   components: {
     Films
   }
