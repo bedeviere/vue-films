@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import Movies from './views/Movies.vue'
+import TVShows from './views/TVShows.vue'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -22,7 +25,7 @@ export default new Router({
     {
       path: '/movie',
       name: 'movies',
-      component: () => import('./views/Movies.vue')
+      component: Movies
     },
     {
       path: '/movie/:film_id',
@@ -32,7 +35,7 @@ export default new Router({
     {
       path: '/tv',
       name: 'tvshows',
-      component: () => import('./views/TVShows.vue')
+      component: TVShows
     },
     {
       path: '/tv/:film_id',

@@ -2,7 +2,7 @@
   <div class="films">
     <div class="container">
       <b-pagination size="lg" :total-rows="totalResults" v-model="currentPage" :per-page="filmList.length" align="center"></b-pagination>
-      <ul class="films-list row">
+      <transition-group tag="ul" class="films-list row" name="fade">
         <li class="col-md-3 col-xs-6" v-for="film in filmList" :key="film.id">
           <div class="films-image">
             <router-link v-if="filmType == 'movie'" :to="{ name: 'movie', params: { film_id: film.id }}">
@@ -17,7 +17,7 @@
             <router-link v-else-if="filmType == 'tv'" :to="{ name: 'tvshow', params: { film_id: film.id }}">{{ film.name }}</router-link>
           </div>
         </li>
-      </ul>
+      </transition-group>
       <b-pagination size="lg" :total-rows="totalResults" v-model="currentPage" :per-page="filmList.length" align="center"></b-pagination>
       <p>{{ filmError.status_message }}</p>
     </div>
