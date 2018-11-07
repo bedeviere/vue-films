@@ -1,9 +1,9 @@
 <template>
   <div class="films">
-    <div class="container">
-      <b-pagination size="lg" :total-rows="totalResults" v-model="currentPage" :per-page="filmList.length" align="center"></b-pagination>
-      <transition-group tag="ul" class="films-list row" name="fade">
-        <li class="col-md-3 col-xs-6" v-for="film in filmList" :key="film.id">
+    <v-container grid-list-md>
+      <v-pagination v-model="currentPage" :length="totalResults / 20" :total-visible="9"></v-pagination>
+      <v-layout row wrap class="films-list">
+        <v-flex xs6 md3 v-for="film in filmList" :key="film.id">
           <div class="films-image">
             <router-link v-if="filmType == 'movie'" :to="{ name: 'movie', params: { film_id: film.id }}">
               <img v-bind:src="'https://image.tmdb.org/t/p/w370_and_h556_bestv2' + film.poster_path" v-bind:alt="film.title">
@@ -16,25 +16,21 @@
             <router-link v-if="filmType == 'movie'" :to="{ name: 'movie', params: { film_id: film.id }}">{{ film.title }}</router-link>
             <router-link v-else-if="filmType == 'tv'" :to="{ name: 'tvshow', params: { film_id: film.id }}">{{ film.name }}</router-link>
           </div>
-        </li>
-      </transition-group>
-      <b-pagination size="lg" :total-rows="totalResults" v-model="currentPage" :per-page="filmList.length" align="center"></b-pagination>
+        </v-flex>
+      </v-layout>
+      <v-pagination v-model="currentPage" :length="totalResults / 20" :total-visible="9"></v-pagination>
       <p>{{ filmError.status_message }}</p>
-    </div>
+    </v-container>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import bPagination from 'bootstrap-vue/es/components/pagination/pagination';
 
 export default {
   name: 'Films',
   props: {
     filmType: String
-  },
-  components: {
-    bPagination
   },
   data() {
     return {
@@ -74,18 +70,6 @@ export default {
 </script>
 
 <style lang="scss">
-  .films-list {
-    list-style: none;
-    padding-left: 0;
-    &.full {
-      margin-left: 0;
-      margin-right: 0;
-    }
-    > li {
-      margin-bottom: 30px;
-    }
-  }
-
   .films-image {
     margin-bottom: 10px;
     img {

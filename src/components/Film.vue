@@ -1,15 +1,15 @@
 <template>
   <div class="film">
     <div class="film-header" v-bind:style="{ backgroundImage: 'url(https://image.tmdb.org/t/p/w1400_and_h450_face' + filmDetails.backdrop_path + ')'}">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4">
+      <v-container grid-list-md>
+        <v-layout row wrap>
+          <v-flex md4>
             <div class="film-image">
               <img v-if="filmType == 'movie'" v-bind:src="'https://image.tmdb.org/t/p/w370_and_h556_bestv2' + filmDetails.poster_path" v-bind:alt="filmDetails.title">
               <img v-else-if="filmType == 'tv'" v-bind:src="'https://image.tmdb.org/t/p/w370_and_h556_bestv2' + filmDetails.poster_path" v-bind:alt="filmDetails.name">
             </div>
-          </div>
-          <div class="col-md-8">
+          </v-flex>
+          <v-flex md8>
             <div class="film-title">
               <h1 v-if="filmType == 'movie'">{{ filmDetails.title }} <span>({{ filmYear }})</span></h1>
               <h1 v-else-if="filmType == 'tv'">{{ filmDetails.name }} <span>({{ filmYear }})</span></h1>
@@ -23,22 +23,41 @@
             </div>
             <div class="film-featured-crew">
               <h4>Featured Crews</h4>
-              <ul v-if="filmType == 'movie'" class="row">
-                <li class="col-md-4" v-for="crew in filmFeaturedCrews" :key="crew.id">
+              <v-layout row wrap v-if="filmType == 'movie'">
+                <v-flex md4 v-for="crew in filmFeaturedCrews" :key="crew.id">
                   <label>{{ crew.name }}</label>
                   <p>{{ crew.job }}</p>
-                </li>
-              </ul>
-              <ul v-else-if="filmType == 'tv'" class="row">
-                <li class="col-md-4" v-for="crew in filmDetails.created_by" :key="crew.id">
+                </v-flex>
+              </v-layout>
+              <v-layout row wrap v-else-if="filmType == 'tv'">
+                <v-flex md4 v-for="crew in filmDetails.created_by" :key="crew.id">
                   <label>{{ crew.name }}</label>
                   <p>Creator</p>
-                </li>
-              </ul>
+                </v-flex>
+              </v-layout>
             </div>
-          </div>
-        </div>
-      </div>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </div>
+
+    <div class="film-featured-cast">
+      <v-container grid-list-md>
+        <h2>Top Billed Cast</h2>
+        <v-layout row wrap>
+          <v-flex md2 v-for="(cast, i) in filmFeaturedCasts" :key="i">
+            <v-card>
+              <v-img :src="'https://image.tmdb.org/t/p/w276_and_h350_face' + cast.profile_path"></v-img>
+              <v-card-title class="text-xs-left">
+                <div class="film-featured-cast-data">
+                  <h3>{{ cast.name }}</h3>
+                  <p>{{ cast.character }}</p>
+                </div>
+              </v-card-title>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
     </div>
     <p>{{ filmError.status_message }}</p>
   </div>
@@ -57,6 +76,7 @@ export default {
       filmDetails: [],
       filmYear: '',
       filmFeaturedCrews: [],
+      filmFeaturedCasts: [],
       filmError: ''
     };
   },
@@ -82,12 +102,20 @@ export default {
 
       axios.get('https://api.themoviedb.org/3/' + vm.filmType + '/' + vm.$route.params.film_id + '/credits?api_key=e7bb37000f296041371c3e152014822e')
         .then(function (res) {
-          var n = res.data.crew.length;
-          if (n > 9) {
-            n = 9;
+          var crewLength = res.data.crew.length;
+          if (crewLength > 9) {
+            crewLength = 9;
           }
-          for (var i = 0; i < n; i++) {
+          for (var i = 0; i < crewLength; i++) {
             vm.filmFeaturedCrews.push(res.data.crew[i]);
+          }
+
+          var castLength = res.data.cast.length;
+          if (castLength > 6) {
+            castLength = 6;
+          }
+          for (var i = 0; i < castLength; i++) {
+            vm.filmFeaturedCasts.push(res.data.cast[i]);
           }
         })
         .catch(function (err) {
@@ -118,6 +146,11 @@ export default {
       right: 0;
       bottom: 0;
       left: 0;
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
     }
   }
 
@@ -138,16 +171,18 @@ export default {
   }
 
   .film-featured-crew {
-    > ul {
-      list-style: none;
-      padding-left: 0;
-    }
     label {
       margin-bottom: 0;
       font-weight: 700;
     }
     p {
       font-size: 0.8rem;
+    }
+  }
+
+  .film-featured-cast {
+    h3 {
+      font-size: 1.2rem;
     }
   }
 </style>

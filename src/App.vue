@@ -1,62 +1,49 @@
 <template>
-  <div id="app">
-    <header>
-      <div class="container">
-        <div id="nav">
-          <router-link to="/">Home</router-link> |
-          <router-link to="/about">About</router-link> | 
-          <router-link to="/movie">Movies</router-link> |
-          <router-link to="/tv">TV Shows</router-link>
-        </div>
-      </div>
-    </header>
-    <section>
-      <transition name="fade" mode="out-in">
+  <v-app>
+    <v-toolbar app>
+      <v-toolbar-title class="headline text-uppercase">
+        <router-link to="/"><span>VUE FILMS</span></router-link>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn flat to="/about">About</v-btn>
+      <v-btn flat to="/movie">Movies</v-btn>
+      <v-btn flat to="/tv">TV Shows</v-btn>
+      <v-btn
+        flat
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+      >
+        <span class="mr-2">Latest Release</span>
+      </v-btn>
+    </v-toolbar>
+
+    <v-content>
+      <v-fade-transition hide-on-leave>
         <router-view></router-view>
-      </transition>
-    </section>
-    <footer>This is footer</footer>
-  </div>
+      </v-fade-transition>
+    </v-content>
+
+    <v-footer height="auto">
+      <v-card-text class="text-xs-center">
+        Footer
+      </v-card-text>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      //
+    }
+  }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-header {
-  padding: 20px 0px;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition-duration: 0.3s;
-  transition-property: opacity;
-  transition-timing-function: ease;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 700;
-}
+<style lang="scss">
+  main {
+    text-align: center;
+  }
 </style>

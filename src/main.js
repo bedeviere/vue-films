@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import './plugins/vuetify'
 import router from './router'
 import './plugins/axios'
 import 'bootstrap/dist/css/bootstrap.css'
