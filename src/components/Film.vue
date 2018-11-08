@@ -114,8 +114,8 @@ export default {
           if (castLength > 6) {
             castLength = 6;
           }
-          for (var i = 0; i < castLength; i++) {
-            vm.filmFeaturedCasts.push(res.data.cast[i]);
+          for (var j = 0; j < castLength; j++) {
+            vm.filmFeaturedCasts.push(res.data.cast[j]);
           }
         })
         .catch(function (err) {
@@ -139,7 +139,7 @@ export default {
     &::before {
       content: '';
       display: block;
-      background-color: #222;
+      background-color: $color-default;
       opacity: 0.9;
       position: absolute;
       top: 0;
@@ -174,9 +174,7 @@ export default {
     label {
       margin-bottom: 0;
       font-weight: 700;
-    }
-    p {
-      font-size: 0.8rem;
+      font-size: 1.2rem;
     }
   }
 

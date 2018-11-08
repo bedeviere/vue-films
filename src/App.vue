@@ -1,20 +1,15 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <v-toolbar app dark>
       <v-toolbar-title class="headline text-uppercase">
-        <router-link to="/"><span>VUE FILMS</span></router-link>
+        <router-link to="/" class="header-logo"><span>VUE FILMS</span></router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat to="/about">About</v-btn>
-      <v-btn flat to="/movie">Movies</v-btn>
-      <v-btn flat to="/tv">TV Shows</v-btn>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
+      <v-toolbar-items>
+        <v-btn flat to="/about">About</v-btn>
+        <v-btn flat to="/movie">Movies</v-btn>
+        <v-btn flat to="/tv">TV Shows</v-btn>
+      </v-toolbar-items>
     </v-toolbar>
 
     <v-content>
@@ -43,7 +38,23 @@ export default {
 </script>
 
 <style lang="scss">
+  .application--wrap {
+    color: $color-default;
+  }
+  
   main {
     text-align: center;
+  }
+
+  .v-toolbar {
+    background-color: $color-primary !important;
+  }
+
+  .header-logo {
+    color: #fff;
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
   }
 </style>
