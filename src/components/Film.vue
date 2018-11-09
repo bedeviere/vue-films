@@ -15,7 +15,16 @@
               <h1 v-else-if="filmType == 'tv'">{{ filmDetails.name }} <span>({{ filmYear }})</span></h1>
             </div>
             <div class="film-dashboard">
-              <div class="film-rating">{{ filmDetails.vote_average * 10 }}%</div>
+              <v-layout row wrap>
+                <v-flex xs2>
+                  <div class="film-rating">{{ filmVoteAverage }}%</div>
+                </v-flex>
+                <v-flex v-if="filmTrailerVideos.length != 0">
+                  <div class="film-trailer">
+                    <v-btn outline color="white" @click="filmTrailerDialog = true">See Trailer</v-btn>
+                  </div>
+                </v-flex>
+              </v-layout>
             </div>
             <div class="film-overview">
               <h4>Overview</h4>
@@ -59,6 +68,14 @@
         </v-layout>
       </v-container>
     </div>
+
+    <v-dialog v-if="filmTrailerVideos.length != 0" v-model="filmTrailerDialog" max-width="960">
+      <v-card>
+        <div class="film-trailer-video">
+          <iframe width="560" height="315" :src="'https://www.youtube.com/embed/' + filmTrailerVideoLatest.key" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </v-card>
+    </v-dialog>
     <p>{{ filmError.status_message }}</p>
   </div>
 </template>
@@ -75,6 +92,10 @@ export default {
     return {
       filmDetails: [],
       filmYear: '',
+      filmVoteAverage: 0,
+      filmTrailerDialog: false,
+      filmTrailerVideos: [],
+      filmTrailerVideoLatest: '',
       filmFeaturedCrews: [],
       filmFeaturedCasts: [],
       filmError: ''
@@ -94,6 +115,25 @@ export default {
             vm.filmYear = (new Date(vm.filmDetails.release_date)).getFullYear();
           } else if (vm.filmType == 'tv') {
             vm.filmYear = (new Date(vm.filmDetails.first_air_date)).getFullYear();
+          }
+
+          vm.filmVoteAverage = vm.filmDetails.vote_average * 10;
+        })
+        .catch(function (err) {
+          vm.filmError = err.response.data;
+        });
+
+      axios.get('https://api.themoviedb.org/3/' + vm.filmType + '/' + vm.$route.params.film_id + '/videos?api_key=e7bb37000f296041371c3e152014822e')
+        .then(function (res) {
+          var videoLength = res.data.results.length;
+          for (var i = 0; i < videoLength; i++) {
+            if (res.data.results[i].type == 'Trailer' && res.data.results[i].site == 'YouTube') {
+              vm.filmTrailerVideos.push(res.data.results[i]);
+            }
+          }
+
+          if (vm.filmTrailerVideos.length > 0) {
+            vm.filmTrailerVideoLatest = vm.filmTrailerVideos[vm.filmTrailerVideos.length - 1];
           }
         })
         .catch(function (err) {
@@ -168,6 +208,20 @@ export default {
 
   .film-rating {
     font-size: 2.2rem;
+  }
+
+  .film-trailer-video {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    padding-top: 25px;
+    height: 0;
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .film-featured-crew {
